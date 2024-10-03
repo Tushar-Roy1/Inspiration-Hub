@@ -4,7 +4,16 @@ import { useSearchParams } from 'next/navigation';
 import { Form } from '@components/Form';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
+
+// Create a function to fetch post details
+const fetchPostDetails = async (postId) => {
+  const response = await fetch(`/api/post/${postId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch post details");
+  }
+  return response.json();
+};
 
 const EditPost = () => {
   const router = useRouter();
@@ -63,9 +72,7 @@ const EditPost = () => {
       if (!postId) return; // Avoid unnecessary fetch if postId is not available
 
       try {
-        const response = await fetch(`/api/post/${postId}`);
-        if (!response.ok) throw new Error("Failed to fetch post details");
-        const data = await response.json();
+        const data = await fetchPostDetails(postId);
         
         setPost({
           post: data.post,
@@ -85,13 +92,15 @@ const EditPost = () => {
     <div>
       <h1>Edit Post</h1>
       {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
-      <Form
-        type="Edit"
-        post={post}
-        setPost={setPost}
-        submitting={submitting}
-        handleSubmit={UpdatePost}
-      />
+      <Suspense fallback={<div>Loading post details...</div>}>
+        <Form
+          type="Edit"
+          post={post}
+          setPost={setPost}
+          submitting={submitting}
+          handleSubmit={UpdatePost}
+        />
+      </Suspense>
     </div>
   );
 };
