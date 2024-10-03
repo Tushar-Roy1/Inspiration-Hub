@@ -5,6 +5,7 @@ import { Form } from '@components/Form';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 
 // Create a function to fetch post details
 const fetchPostDetails = async (postId) => {
@@ -89,10 +90,10 @@ const EditPost = () => {
   }, [postId]);
 
   return (
-    <Suspense fallback={<div>Loading post details...</div>}>
-      <div>
-        <h1>Edit Post</h1>
-        {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
+    <div>
+      <h1>Edit Post</h1>
+      {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
+      <Suspense fallback={<div>Loading post details...</div>}>
         <Form
           type="Edit"
           post={post}
@@ -100,9 +101,12 @@ const EditPost = () => {
           submitting={submitting}
           handleSubmit={UpdatePost}
         />
-      </div>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 };
 
-export default EditPost;
+// Disable static generation for this page
+export default dynamic(() => Promise.resolve(EditPost), {
+  ssr: false,
+});
