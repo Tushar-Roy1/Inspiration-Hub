@@ -31,8 +31,9 @@ const Feed = () => {
       try {
         const response = await fetch('/api/post');
         const data = await response.json();
-        setPosts(data.reverse()); // Reverse to show the latest post first
-        setFilteredPosts(data.reverse()); // Same for filtered posts
+        const reversedData = data.reverse(); // Reverse to show the latest post first
+        setPosts(reversedData); // Set posts state
+        setFilteredPosts(reversedData); // Set filtered posts state
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
