@@ -18,8 +18,9 @@ const InspireCard = ({ handleTagClick, post, handleEdit, handleDelete }) => {
   const [copied, setCopied] = useState('');
 
   const handleCopy = () => {
-    setCopied(post.post);
-    navigator.clipboard.writeText(post.post);
+    const textToCopy = `${post.title}\n\n${post.post}`;
+    setCopied(textToCopy);
+    navigator.clipboard.writeText(textToCopy);
     setTimeout(() => setCopied(''), 3000);
   };
 
@@ -48,7 +49,7 @@ const InspireCard = ({ handleTagClick, post, handleEdit, handleDelete }) => {
 
         <div onClick={handleCopy} className='copy_btn'>
           <Image
-            src={copied === post.post ? '/assets/icons/tick.svg' : '/assets/icons/copy.svg'}
+            src={copied === `${post.title}\n\n${post.post}` ? '/assets/icons/tick.svg' : '/assets/icons/copy.svg'}
             width={12}
             height={12}
             className='cursor-pointer'
