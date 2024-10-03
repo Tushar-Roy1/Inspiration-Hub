@@ -4,11 +4,12 @@ import { useSearchParams } from 'next/navigation';
 import { Form } from '@components/Form';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
+import PostDetails from './PostDetails'; // Import the new component
 
 const EditPost = () => {
   const router = useRouter();
-  const { data: session } = useSession(); // Get session data
+  const { data: session } = useSession();
   const searchParams = useSearchParams();
   const postId = searchParams.get('id');
 
@@ -18,7 +19,7 @@ const EditPost = () => {
     post: '',
     tag: '',
   });
-  const [error, setError] = useState(null); // State to handle errors
+  const [error, setError] = useState(null);
 
   const UpdatePost = async (e) => {
     e.preventDefault();
@@ -39,7 +40,7 @@ const EditPost = () => {
         body: JSON.stringify({
           post: post.post,
           title: post.title,
-          userId: session?.user?.id, // Ensure session.user.id exists
+          userId: session?.user?.id,
           tag: post.tag,
         }),
       });
@@ -49,42 +50,22 @@ const EditPost = () => {
         throw new Error(errorData.message || "Failed to update post");
       }
 
-      router.push('/'); // Navigate to homepage after successful update
+      router.push('/');
     } catch (error) {
       console.error(error);
-      setError(error.message); // Set error state to display
+      setError(error.message);
     } finally {
       setSubmitting(false);
     }
   };
 
-  useEffect(() => {
-    const getPostDetails = async () => {
-      if (!postId) return; // Avoid unnecessary fetch if postId is not available
-
-      try {
-        const response = await fetch(`/api/post/${postId}`);
-        if (!response.ok) throw new Error("Failed to fetch post details");
-        const data = await response.json();
-        
-        setPost({
-          post: data.post,
-          title: data.title,
-          tag: data.tag,
-        });
-      } catch (error) {
-        console.error(error);
-        setError(error.message); // Set error state to display
-      }
-    };
-
-    getPostDetails();
-  }, [postId]);
-
   return (
     <div>
       <h1>Edit Post</h1>
-      {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
+      {error && <p className="text-red-500">{error}</p>}
+      <Suspense fallback={<div>Loading post details...</div>}>
+        <PostDetails postId={postId} setPost={setPost} />
+      </Suspense>
       <Form
         type="Edit"
         post={post}
