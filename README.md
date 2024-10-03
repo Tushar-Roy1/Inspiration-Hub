@@ -1,3 +1,21 @@
+Next.js App with CRUD Operations and Google Authentication
+This project is a Next.js application that provides a full-stack experience with a backend integrated using Node.js and MongoDB Atlas. The app supports basic CRUD (Create, Read, Update, Delete) operations and allows users to authenticate via Google. Users can create, update, and delete their profiles and view other users' profiles.
+
+Features
+User Authentication: Implemented Google authentication to allow users to log in securely.
+CRUD Operations: Users can create, read, update, and delete their profiles.
+Profile Viewing: Users can view profiles of other registered users.
+Responsive Design: The application is built to be mobile-friendly and responsive.
+Technologies Used
+Frontend: Next.js
+Backend: Node.js, Express.js
+Database: MongoDB Atlas
+Authentication: Google OAuth
+Styling: CSS/Tailwind CSS (or any other styling method used)
+Installation
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
