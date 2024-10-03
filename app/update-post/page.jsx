@@ -89,10 +89,10 @@ const EditPost = () => {
   }, [postId]);
 
   return (
-    <div>
-      <h1>Edit Post</h1>
-      {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
-      <Suspense fallback={<div>Loading post details...</div>}>
+    <Suspense fallback={<div>Loading post details...</div>}>
+      <div>
+        <h1>Edit Post</h1>
+        {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
         <Form
           type="Edit"
           post={post}
@@ -100,8 +100,8 @@ const EditPost = () => {
           submitting={submitting}
           handleSubmit={UpdatePost}
         />
-      </Suspense>
-    </div>
+      </div>
+    </Suspense>
   );
 };
 
